@@ -54,3 +54,6 @@ STORAGE_CLASS = getattr(settings, 'ROSETTA_STORAGE_CLASS', 'rosetta.storage.Cach
 
 # Extra locale dirs not used by the current installation
 EXTRA_LOCALE_PATHS = getattr(settings, 'ROSETTA_EXTRA_LOCALE_PATHS', [])
+
+# Detailed permissions for rosetta
+ENABLE_PERMISSIONS = getattr(settings, 'ROSETTA_ENABLE_PERMISSIONS', False)

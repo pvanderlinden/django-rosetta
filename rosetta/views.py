@@ -13,6 +13,7 @@ from rosetta.polib import pofile
 from rosetta.poutil import find_pos, pagination_range
 from rosetta.signals import entry_changed, post_save
 from rosetta.storage import get_storage
+from rosetta.permissions import user_filter
 import re
 import rosetta
 import datetime
@@ -310,7 +311,7 @@ def list_languages(request, do_session_warn=False):
 
     has_pos = False
     for language in settings.LANGUAGES:
-        pos = find_pos(language[0], project_apps=project_apps, django_apps=django_apps, third_party_apps=third_party_apps)
+        pos = user_filter(request.user, language[0], find_pos(language[0], project_apps=project_apps, django_apps=django_apps, third_party_apps=third_party_apps))
         has_pos = has_pos or len(pos)
         languages.append(
             (language[0],
@@ -352,7 +353,7 @@ def lang_sel(request, langid, idx):
         third_party_apps = rosetta_i18n_catalog_filter in ('all', 'third-party')
         django_apps = rosetta_i18n_catalog_filter in ('all', 'django')
         project_apps = rosetta_i18n_catalog_filter in ('all', 'project')
-        file_ = find_pos(langid, project_apps=project_apps, django_apps=django_apps, third_party_apps=third_party_apps)[int(idx)]
+        file_ = user_filter(request.user, langid, find_pos(langid, project_apps=project_apps, django_apps=django_apps, third_party_apps=third_party_apps))[int(idx)]
 
         storage.set('rosetta_i18n_lang_code', langid)
         storage.set('rosetta_i18n_lang_name', unicode([l[1] for l in settings.LANGUAGES if l[0] == langid][0]))
